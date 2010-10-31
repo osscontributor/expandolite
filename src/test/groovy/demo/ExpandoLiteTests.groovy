@@ -1,46 +1,56 @@
 package demo
 
-class ExpandoLiteTests extends GroovyTestCase {
+class ExpandoLiteTests extends spock.lang.Specification {
     
-    void testGroovyExpandoLitePropertyAccess() {
-        def expandoLite = new GroovyExpandoLite()
-        expandoLite.favoriteFramework = 'Grails'
-        assertEquals 'Grails', expandoLite.favoriteFramework
+    def "assign a value to a non-existent property and retrieve it's value with a GroovyExpandoLite "() {
+        when: 
+            def expandoLite = new GroovyExpandoLite()
+            expandoLite.favoriteFramework = 'Grails'
+        then:
+            'Grails' == expandoLite.favoriteFramework
+    }
+
+    def "assign a closure to a non-existent property and invoke as method on a GroovyExpandoLite"() {
+        when:
+            def expandoLite = new GroovyExpandoLite()
+            expandoLite.addNumbers = { a, b, c ->
+                a + b + c
+            }
+        then:
+            100 == expandoLite.addNumbers(30, 20, 50)
     }
     
-    void testGroovyExpandoLiteMethodAccess() {
-        def expandoLite = new GroovyExpandoLite()
-        expandoLite.addNumbers = { a, b, c ->
-            a + b + c
-        }
-        assertEquals 100, expandoLite.addNumbers(30, 20, 50)
+    def "verify that an exception is thrown when invoking a non-existent method on a GroovyExpandoLite"() {
+        when:
+            def expandoLite = new GroovyExpandoLite()
+            expandoLite.doSomething()
+        then:
+            thrown MissingMethodException
     }
     
-    void testGroovyExpandoLiteInvokingInvalidMethod() {
-        def expandoLite = new GroovyExpandoLite()
-        shouldFail(MissingMethodException) {
-            expandoLite.someMissingMethod()
-        }
+    def "assign a value to a non-existent property and retrieve it's value with a JavaExpandoLite "() {
+        when: 
+            def expandoLite = new JavaExpandoLite()
+            expandoLite.favoriteFramework = 'Grails'
+        then:
+            'Grails' == expandoLite.favoriteFramework
+    }
+
+    def "assign a closure to a non-existent property and invoke as method on a JavaExpandoLite"() {
+        when:
+            def expandoLite = new JavaExpandoLite()
+            expandoLite.addNumbers = { a, b, c ->
+                a + b + c
+            }
+        then:
+            100 == expandoLite.addNumbers(30, 20, 50)
     }
     
-    void testJavaExpandoLitePropertyAccess() {
-        def expandoLite = new JavaExpandoLite()
-        expandoLite.favoriteFramework = 'Grails'
-        assertEquals 'Grails', expandoLite.favoriteFramework
-    }
-    
-    void testJavaExpandoLiteMethodAccess() {
-        def expandoLite = new JavaExpandoLite()
-        expandoLite.addNumbers = { a, b, c ->
-            a + b + c
-        }
-        assertEquals 100, expandoLite.addNumbers(30, 20, 50)
-    }
-    
-    void testJavaExpandoLiteInvokingInvalidMethod() {
-        def expandoLite = new JavaExpandoLite()
-        shouldFail(MissingMethodException) {
-            expandoLite.someMissingMethod()
-        }
+    def "verify that an exception is thrown when invoking a non-existent method on a JavaExpandoLite"() {
+        when:
+            def expandoLite = new JavaExpandoLite()
+            expandoLite.doSomething()
+        then:
+            thrown MissingMethodException
     }
 }
