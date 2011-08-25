@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class JavaExpandoLite extends GroovyObjectSupport {
  
-    private Map dynamicProperties = new HashMap();
+    private Map<String, Object> dynamicProperties = new HashMap<String, Object>();
     
     public Object getProperty(String propertyName) {
         return dynamicProperties.get(propertyName);
