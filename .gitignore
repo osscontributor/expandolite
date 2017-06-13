@@ -1,6 +1,5 @@
-.idea
 .gradle
-.settings
+.idea
+*.iml
 build
-bin
-*~
+
